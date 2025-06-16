@@ -1,5 +1,11 @@
 # Snakemake Tips
 
+Debug:
+
+```bash
+snakemake -c 84 --use-conda --rerun-triggers mtime
+```
+
 ## Snakemake Options
 
 - `-c, --cores {threads}`: You need to specify the number if you run local jobs.
@@ -8,7 +14,7 @@
 
 ## Rulegraph
 
-![rulegraph](./rulegraph.svg)
+![rulegraph](../rulegraph.svg)
 
 ## Tips
 

@@ -327,15 +327,19 @@ def get_exons_array(gtf_path: str) -> tuple[HTSeq.GenomicArrayOfSets, pd.DataFra
     """
     exons = HTSeq.GenomicArrayOfSets("auto", stranded=True)
     exon_count_index = 0 # starts from 0 for later sparse matrix creation
+    gene_exon_start_end_set = set() # to check if the exon is duplicated
+                                    # format (gene_id-start-end) since gene can only on one strand of chromosome
+                                    # If the same gene has multiple exons with the same start and end, only keep the first exon
     gene_exon_id_set = set() # set check is faster than list
     indexes = []
     gene_exon_ids = []
     gene_types = []
     gene_names = []
+    chroms = []
+    strands = []
     starts = []
     ends = []
     lengths = []
-    strands = []
 
     for feature in HTSeq.GFF_Reader(gtf_path):
         if feature.type == "exon":
@@ -343,6 +347,12 @@ def get_exons_array(gtf_path: str) -> tuple[HTSeq.GenomicArrayOfSets, pd.DataFra
             if gene_exon_id in gene_exon_id_set: # Skip duplicated exons 
                 # (different trnascripts from the same gene may have the same exon)
                 continue
+            gene_start_end = f"{feature.attr['gene_id']}-{feature.iv.start}-{feature.iv.end}"
+            if gene_start_end in gene_exon_start_end_set: # Skip duplicated exons
+                # (different trnascripts from the same gene may have the same exon)
+                continue
+            gene_exon_start_end_set.add(gene_start_end)
+
             exons[feature.iv] += gene_exon_id
             gene_exon_id_set.add(gene_exon_id)
 
@@ -350,17 +360,23 @@ def get_exons_array(gtf_path: str) -> tuple[HTSeq.GenomicArrayOfSets, pd.DataFra
             gene_exon_ids.append(gene_exon_id)
             gene_types.append(feature.attr['gene_type'])
             gene_names.append(feature.attr['gene_name'])
+            chroms.append(feature.iv.chrom)
+            strands.append(feature.iv.strand)
             lengths.append(feature.iv.end - feature.iv.start) # Length of the exon (be careful with 0-based indexing)
             starts.append(feature.iv.start + 1)  # HTSeq uses 0-based indexing, but we use 1-based for output
             ends.append(feature.iv.end) # HTSeq uses 0-based indexing but the end is exclusive, so we can use it directly.
-            strands.append(feature.iv.strand)
             exon_count_index += 1
 
     exon_count_table = pd.DataFrame({
         "exon_index": indexes,
         "gene_exon_id": gene_exon_ids,
         "gene_type": gene_types,
-        "gene_name": gene_names
+        "gene_name": gene_names,
+        "chrom": chroms,
+        "strand": strands,
+        "start": starts,
+        "end": ends,
+        "length": lengths
     })
 
     return exons, exon_count_table
