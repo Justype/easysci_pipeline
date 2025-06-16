@@ -1,0 +1,19 @@
+name: sci_rna
+channels:
+  - conda-forge
+  - bioconda
+channel_priority: strict
+dependencies:
+  - python=3.12
+  - pandas=2.2.3
+  - openpyxl=3.1.5
+  - numpy=1.26.4
+  - scipy=1.14.1
+  - pysam=0.22.1
+  - htseq=2.0.5 # numpy >=1.26.4,<2.0a0
+  - trim-galore=0.6.10
+  - cutadapt=5.0
+  - fastqc=0.12.1
+  - pigz=2.8
+  - star=2.7.11b
+  - samtools=1.21

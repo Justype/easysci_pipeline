@@ -1,0 +1,64 @@
+# This is a configuration file for the scRNA-seq pipeline.
+output_type:
+  gene: true     # Generate gene expression matrix
+  exon: true     # Generate exon expression matrix
+
+# Please use absolute paths for input files and directories.
+prebuilt_star_index: # If folder does not exist, it will be skipped.
+  human: input/star_index/human/
+  mouse: input/star_index/mouse/
+fasta_file: # Can be local or remote (https?://)
+  human: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_47/GRCh38.primary_assembly.genome.fa.gz
+  mouse: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M36/GRCm39.primary_assembly.genome.fa.gz
+gtf_file: # Can be local or remote (https?://)
+  human: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_47/gencode.v47.primary_assembly.annotation.gtf.gz
+  mouse: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M36/gencode.vM36.primary_assembly.annotation.gtf.gz
+
+seq_length: 150 # Length of the sequencing reads, used when generating STAR index
+
+threads:
+  generate_index: 16 # STAR index generation threads
+  trim: 4 # trim_galore threads
+  star: 8 # STAR threads
+  bam_filter_dedup: 4 # samtools threads
+  count_exon: 84 # aggregate all files (so increased, up to 96)
+  count_gene: 84
+
+# You don't need to change the following settings unless you have specific requirements.
+# Logs directory
+log_dir: output/logs
+log_dir_run: output/logs/run
+
+# General settings
+input_dir: input/fastqs
+input_prefix_file: input/i7_demux_prefix.txt
+barcodes_xlsx: input/Barcodes.xlsx # Barcode files
+
+# Output directories
+output_dir_intermediate: output/intermediate
+output_dir: output
+output_dir_final: output/final # final sub folder can be {species}_{feature} e.g. human_gene, mouse_exon
+
+# Output matrix files
+output_matrix: # in the output_dir_final directory
+  mtx: expression_matrix.mtx.gz
+  cells: cell_annotation.csv.gz
+  features: feature_annotation.csv.gz
+
+# Intermediate files
+build_objects: output/intermediate/build_objects.txt
+barcodes: # output
+  ligation_barcode: output/intermediate/ligation_barcodes.pkl
+  rt_barcode:
+    human: output/intermediate/RT_barcodes_human.pkl
+    mouse: output/intermediate/RT_barcodes_mouse.pkl
+  rt_barcode_tsv:
+    human: output/intermediate/RT_barcodes_human.tsv
+    mouse: output/intermediate/RT_barcodes_mouse.tsv
+read_barcode_format:
+  ligation_cell_barcode_length: 10
+  rt_umi_length: 8
+  rt_cell_barcode_length: 10
+  polyT_length: 15
+star_index_folder: output/intermediate/star_index # /{species}
+genome_folder: output/intermediate/genome # /{species}.(fa|gtf)

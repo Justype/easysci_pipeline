@@ -1,3 +1,9 @@
+# Skip .snakemake and output folder
+.snakemake/
+output/
+input/fastqs/*fastq*
+input/i7_demux_prefix.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

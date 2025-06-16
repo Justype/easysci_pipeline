@@ -1,0 +1,28 @@
+configfile: "config.yaml"
+
+include: "rules/build_targets.smk"
+include: "rules/generate_index.smk" # download or link genome and build STAR index
+include: "rules/generate_py_barcode.smk" # create tsv and python dict for barcodes
+include: "rules/barcoding.smk" # add barcode to read name from sequence
+include: "rules/trim.smk" # trim adapter and polyA from reads
+include: "rules/star.smk" # align reads to genome
+include: "rules/bam_filter_dedup.smk" # get primary reads, remove duplicates
+include: "rules/count_exon.smk" # count reads using exon annotation
+include: "rules/count_gene.smk" # count reads using gene annotation
+
+PREFIXES = [prefix for prefix in open(config["input_prefix_file"]).read().splitlines() if prefix]
+
+from os import path
+
+build_targets = []
+for species in ["human", "mouse"]:
+    for count_type in [ "gene", "exon"]: # "gene", "exon"
+        build_targets.append(path.join(config["output_dir_final"], f"{species}_{count_type}", config["output_matrix"]["mtx"]))
+        build_targets.append(path.join(config["output_dir_final"], f"{species}_{count_type}", config["output_matrix"]["cells"]))
+        build_targets.append(path.join(config["output_dir_final"], f"{species}_{count_type}", config["output_matrix"]["features"]))
+
+rule targets:
+    input:
+        generate_final_build_objects, # dynamically create object by rt_barcode_tsv
+
+        # build_targets, # To generate rulegraph and dag

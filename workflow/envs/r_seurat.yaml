@@ -1,0 +1,9 @@
+name: r_seurat
+channels:
+  - conda-forge
+  - bioconda
+channel_priority: strict
+dependencies: # You should set the seurat version in your downstream workflow
+  - r-base
+  - r-seurat
+  - r-tidyverse
