@@ -14,7 +14,7 @@ snakemake -c 84 --use-conda --rerun-triggers mtime
 
 ## Rulegraph
 
-![rulegraph](../rulegraph.svg)
+![rulegraph](./rulegraph.svg)
 
 ## Tips
 

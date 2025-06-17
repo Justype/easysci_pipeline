@@ -1,6 +1,6 @@
 # EasySci RNA Pipeline
 
-A Snakemake pipeline for processing [JunyueCaoLab/EasySci](https://github.com/JunyueCaoLab/EasySci) methods. (Paired End ONLY)
+A Snakemake pipeline for processing [JunyueCaoLab/EasySci](https://github.com/JunyueCaoLab/EasySci) RNA fastqs. (Paired End ONLY)
 
 ## Running the Pipeline
 
@@ -54,7 +54,7 @@ NOTE:
 
 ## Rule Graph
 
-![Rule Graph](./rulegraph.svg)
+![Rule Graph](./docs/rulegraph.svg)
 
 ## References
 

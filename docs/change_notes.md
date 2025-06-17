@@ -8,5 +8,5 @@
 
 Current Problems / TODO list:
 
-1. Paired-end reads are count separately in exon counting, which may cause double counting if R1 and R2 are in the same exon. (Do not affect differential expression analysis)
+1. Paired-end reads are counted separately in exon counting, which may cause double counting if R1 and R2 are in the same exon. (Do not affect differential expression analysis)
 2. Junction reads are discarded in exon counting, which is a waste of information. If running `samtools view | grep [0-9]N`, 10% of reads are junction reads.
