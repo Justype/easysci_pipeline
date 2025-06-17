@@ -20,7 +20,7 @@ rule generate_py_barcode:
     threads: 1
     resources:
         mem_mb = 500,
-        runtime = "00:30:00"
+        runtime = 30,  # 30 minutes
     shell:
         """
         python workflow/scripts/generate_py_barcode.py {input.barcode_xlsx} {params.base_dir} &> {log}

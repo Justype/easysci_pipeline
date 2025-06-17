@@ -19,7 +19,7 @@ rule generate_index:
         config["threads"]["generate_index"]
     resources:
         mem_mb = 40960,  # 40GB
-        runtime = "12:00:00",
+        runtime = 720,  # 12 hours
     shell:
         """
         if [ -d {params.prebuilt_star_index} ]; then
@@ -50,7 +50,7 @@ rule create_fasta:
         config["threads"]["generate_index"]
     resources:
         mem_mb = 1024,  # 1GB
-        runtime = "2:00:00",
+        runtime = 120,  # 2 hours
     shell:
         """
         if [ -d {params.prebuilt_star_index} ]; then
@@ -92,7 +92,7 @@ rule create_gtf: # GTF cannot be prebuilt, so we always create it
         config["threads"]["generate_index"]
     resources:
         mem_mb = 1024,  # 1GB
-        runtime = "2:00:00",
+        runtime = 120,  # 2 hours
     shell:
         """
         # Check if input is url or local file and check if gzipped

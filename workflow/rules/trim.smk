@@ -20,7 +20,7 @@ rule trim:
         config["threads"]["trim"]
     resources:
         mem_mb = lambda wildcards, threads: 1024 + threads * 512,  # 1GB + 512MB per thread
-        runtime = "6:00:00"
+        runtime = 360,  # 6 hours
     shell:
         """
         trim_galore \\

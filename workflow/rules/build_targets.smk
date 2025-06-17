@@ -43,7 +43,7 @@ checkpoint generate_final_targets:
     threads: 1
     resources:
         mem_mb = 100,  # 100MB should be enough for a small file
-        runtime = "00:05:00"
+        runtime = 5, # 5 minutes
     shell:
         """
         echo {params.build_objects} > {output}

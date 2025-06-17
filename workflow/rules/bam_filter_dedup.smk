@@ -17,7 +17,7 @@ rule bam_filter_dedup:
         config["threads"]["bam_filter_dedup"]
     resources:
         mem_mb = lambda wildcards, threads: threads * 850,  # samtools uses 768M per thread by default
-        runtime = "6:00:00",
+        runtime = 360, # 6 hours
     shell:
         """
         samtools view -@ {threads} -h -q 30 -f 2 -F 780 -b {input} | \\

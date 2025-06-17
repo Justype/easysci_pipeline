@@ -34,7 +34,7 @@ rule count_gene:
         config["threads"]["count_gene"]
     resources:
         mem_mb = lambda wildcards, threads: 2048 + threads * 256,  # 2GB + 256MB per thread
-        runtime = "12:00:00"
+        runtime = 720,  # 12 hours
     shell:
         """
         python workflow/scripts/counting_gene_paired_parallel.py \
@@ -65,7 +65,7 @@ rule merge_gene:
     threads: 1
     resources:
         mem_mb = 100 * len(PREFIXES),  # 100MB per i7 prefix
-        runtime = "4:00:00",
+        runtime = 240,  # 4 hours
     shell:
         """
         python workflow/scripts/merging_count_gene.py \

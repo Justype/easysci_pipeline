@@ -30,7 +30,7 @@ rule barcoding:
     threads: 1
     resources:
         mem_mb = 500, 
-        runtime = "4:00:00",
+        runtime = 240,  # 4 hours
     shell:
         """
         python workflow/scripts/barcoding_paired.py \\
