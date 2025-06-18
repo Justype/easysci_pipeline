@@ -1,5 +1,11 @@
 # EasySci RNA Pipeline
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15692165.svg
+        
+        )](https://doi.org/10.5281/zenodo.15692165
+        
+        )
+
 A Snakemake pipeline for processing [JunyueCaoLab/EasySci](https://github.com/JunyueCaoLab/EasySci) RNA fastqs. (Paired End ONLY)
 
 ## Running the Pipeline
@@ -84,7 +90,9 @@ NOTE:
 
 ## References
 
-- EasySci Nature Genetics [https://doi.org/10.1038/s41588-023-01572-y](https://www.nature.com/articles/s41588-023-01572-y)
+- EasySci Nature Genetics [https://doi.org/10.1038/s41588-023-01572-y
+        
+        ](https://www.nature.com/articles/s41588-023-01572-y)
 - [EasySci PhD Thesis](https://digitalcommons.rockefeller.edu/student_theses_and_dissertations/778/)
 - repo [JunyueCaoLab/EasySci](https://github.com/JunyueCaoLab/EasySci)
 - repo [JunyueC/sci-RNA-seq3_pipeline](https://github.com/JunyueC/sci-RNA-seq3_pipeline)
