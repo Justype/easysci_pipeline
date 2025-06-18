@@ -9,6 +9,7 @@ rule count_exon:
         input_folder = lambda wildcards: path.join(config["output_dir"], wildcards.species, "bam_filtered"),
         output_folder = lambda wildcards: path.join(config["output_dir"], wildcards.species, "exon"),
         i7_prefix_file = config["input_prefix_file"],
+        counting_script = f"workflow/scripts/counting_exon_paired_parallel_{config['exon_counting_method'].lower()}.py",
     input:
         bams = lambda wildcards: expand(
             path.join(config["output_dir"], wildcards.species, "bam_filtered", "{prefix}.filtered.dedup.bam"),
@@ -33,11 +34,11 @@ rule count_exon:
     threads:
         config["threads"]["count_exon"]
     resources:
-        mem_mb = lambda wildcards, threads: 2048 + threads * 256,  # 2GB + 256MB per thread
+        mem_mib = lambda wildcards, threads: 2048 + threads * 256,  # 2GB + 256MB per thread
         runtime = 720,  # 12 hours
     shell:
         """
-        python workflow/scripts/counting_exon_paired_parallel_EasySci.py \
+        python {params.counting_script} \
             --threads {threads} --gzip \
             --input_folder {params.input_folder} \
             --output_folder {params.output_folder} \
@@ -63,7 +64,7 @@ rule merge_exon:
         "../envs/sci_rna.yaml"
     threads: 1
     resources:
-        mem_mb = 100 * len(PREFIXES),  # 100MB per i7 prefix
+        mem_mib = 100 * len(PREFIXES),  # 100MB per i7 prefix
         runtime = 240,  # 4 hours
     shell:
         """

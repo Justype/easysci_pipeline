@@ -10,6 +10,12 @@ Run with 48 threads and use conda environments defined in the Snakefile.
 snakemake --use-conda -c 48
 ```
 
+The output matrix files will be in the `output/final/(human|mouse)_(gene|exon)` folders.
+
+You can use [read_count_mtx.R](./workflow/scripts/read_count_mtx.R) to read the output matrix as a `Seurat` object.
+
+Due to the nature of the EasySci method, most of the “nuclei” have low UMI counts (< 50). They are not true nuclei, but environmental RNA fragments.
+
 ## Before Running
 
 1. Install [snakemake](https://github.com/snakemake/snakemake)
@@ -18,6 +24,7 @@ snakemake --use-conda -c 48
     - Go to the `input` directory and run: `./rename_fastqs.sh`
 4. Update the `input/Barcodes.xlsx` file with your sample plate info.
 5. Change the `config.yaml` file to your needs.
+    - Choose you preferred exon counting methods.
 
 ### Input Fastqs
 
@@ -46,11 +53,30 @@ Please check the `config.yaml`
 |Fasta file| `fasta_file`| absolute path or URL (can be gzipped) |
 |GTF file| `gtf_file`| absolute path or URL (can be gzipped) |
 |Read length| `seq_length`| used for STAR index generation |
+|Exon counting method| `exon_counting_method`| `junction`, `balanced`, or `easysci` |
 
 NOTE:
 
 - Please use gunzipped local fasta and gtf files (The script will create symlinks to them. If not, it will unzip them).
 - If `prebuilt_star_index` is set, the fasta will not be used, but the gtf file will still be used for counting.
+
+#### Exon Counting Method
+
+<a target="_blank" href="https://colab.research.google.com/github/Justype/easysci_pipeline/blob/main/docs/ipynbs/EasySci_issues.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a> EasySci Exon Counting Issues
+
+- `easysci`'s problems:
+  - Double counting if paired-end reads are in the same exon.
+  - Junction reads (`N` in CIGAR) are not used.
+  - If read1 overlaps with `{exon1, exon2}` and read2 overlaps with `{exon2}`, it will be counted as `exon1` and `exon2` in the `easysci` method.
+- `balanced`:
+  - Solve the double counting issue by treating R1 and R2 as a group, and only count reads in the same exon once.
+  - If read1 overlaps with `{exon1, exon2}` and read2 overlaps with `{exon2}`, it will be counted as `exon2` in the `balanced` method.
+- `junction`:
+  - The same as `balanced`, but uses both exon and junction reads.
+  - Improves the detection of exons whose length is less than read length (150bp in NovaSeq).
+  - Separate reads by CIGAR `N` into blocks, and count the blocks separately.
 
 ## Rule Graph
 
@@ -71,7 +97,7 @@ Run on slurm clusters (not tested yet):
 ```bash
 snakemake -j unlimited \
   --use-conda \
-  --cluster "sbatch --job-name={rule} --cpus-per-task={threads} --mem={resources.mem_mb} --time={resources.runtime}" \
+  --cluster "sbatch --job-name={rule} --cpus-per-task={threads} --mem={resources.mem_mib} --time={resources.runtime}" \
   --latency-wait 60
 ```
 

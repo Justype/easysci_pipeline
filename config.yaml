@@ -15,6 +15,11 @@ gtf_file: # Can be local or remote (https?://)
   mouse: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M36/gencode.vM36.primary_assembly.annotation.gtf.gz
 
 seq_length: 150 # Length of the sequencing reads, used when generating STAR index
+exon_counting_method: "easysci" # easysci, balanced, junction
+# Counting methods
+# easysci is the default method from the paper
+# balanced is using exon reads and only count once if both reads are in the same exon
+# junction is using both exon and junction reads and only count once if both blocks are in the same exon (blocks are separated by CIGAR operator N)
 
 threads:
   generate_index: 16 # STAR index generation threads

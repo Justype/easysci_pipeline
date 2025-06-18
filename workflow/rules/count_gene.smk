@@ -33,7 +33,7 @@ rule count_gene:
     threads:
         config["threads"]["count_gene"]
     resources:
-        mem_mb = lambda wildcards, threads: 2048 + threads * 256,  # 2GB + 256MB per thread
+        mem_mib = lambda wildcards, threads: 2048 + threads * 256,  # 2GB + 256MB per thread
         runtime = 720,  # 12 hours
     shell:
         """
@@ -64,7 +64,7 @@ rule merge_gene:
         "../envs/sci_rna.yaml"
     threads: 1
     resources:
-        mem_mb = 100 * len(PREFIXES),  # 100MB per i7 prefix
+        mem_mib = 100 * len(PREFIXES),  # 100MB per i7 prefix
         runtime = 240,  # 4 hours
     shell:
         """

@@ -18,7 +18,7 @@ rule generate_index:
     threads:
         config["threads"]["generate_index"]
     resources:
-        mem_mb = 40960,  # 40GB
+        mem_mib = 40960,  # 40GB
         runtime = 720,  # 12 hours
     shell:
         """
@@ -49,7 +49,7 @@ rule create_fasta:
     threads:
         config["threads"]["generate_index"]
     resources:
-        mem_mb = 1024,  # 1GB
+        mem_mib = 1024,  # 1GB
         runtime = 120,  # 2 hours
     shell:
         """
@@ -91,7 +91,7 @@ rule create_gtf: # GTF cannot be prebuilt, so we always create it
     threads:
         config["threads"]["generate_index"]
     resources:
-        mem_mb = 1024,  # 1GB
+        mem_mib = 1024,  # 1GB
         runtime = 120,  # 2 hours
     shell:
         """

@@ -19,7 +19,7 @@ rule star:
     threads:
         config["threads"]["star"]
     resources:
-        mem_mb = lambda wildcards, threads: 40960 + threads * 150,  # 40GB + 150MB per thread
+        mem_mib = lambda wildcards, threads: 40960 + threads * 150,  # 40GB + 150MB per thread
         runtime = 720,  # 12 hours
     shell:
         """

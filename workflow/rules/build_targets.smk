@@ -42,7 +42,7 @@ checkpoint generate_final_targets:
         config["build_objects"]
     threads: 1
     resources:
-        mem_mb = 100,  # 100MB should be enough for a small file
+        mem_mib = 100,  # 100MB should be enough for a small file
         runtime = 5, # 5 minutes
     shell:
         """

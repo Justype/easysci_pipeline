@@ -29,7 +29,7 @@ rule barcoding:
         "../envs/sci_rna.yaml"
     threads: 1
     resources:
-        mem_mb = 500, 
+        mem_mib = 500, 
         runtime = 240,  # 4 hours
     shell:
         """

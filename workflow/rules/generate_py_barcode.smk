@@ -19,7 +19,7 @@ rule generate_py_barcode:
         "../envs/sci_rna.yaml"
     threads: 1
     resources:
-        mem_mb = 500,
+        mem_mib = 500,
         runtime = 30,  # 30 minutes
     shell:
         """
