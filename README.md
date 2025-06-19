@@ -83,11 +83,7 @@ NOTE:
 
 ## References
 
-- EasySci Nature Genetics [https://doi.org/10.1038/s41588-023-01572-y
-        
-        
-        
-        ](https://www.nature.com/articles/s41588-023-01572-y)
+- EasySci Nature Genetics https://www.nature.com/articles/s41588-023-01572-y
 - [EasySci PhD Thesis](https://digitalcommons.rockefeller.edu/student_theses_and_dissertations/778/)
 - repo [JunyueCaoLab/EasySci](https://github.com/JunyueCaoLab/EasySci)
 - repo [JunyueC/sci-RNA-seq3_pipeline](https://github.com/JunyueC/sci-RNA-seq3_pipeline)
