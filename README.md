@@ -1,10 +1,6 @@
 # EasySci RNA Pipeline
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15692165.svg
-        
-        )](https://doi.org/10.5281/zenodo.15692165
-        
-        )
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15692165.svg)](https://doi.org/10.5281/zenodo.15692165)
 
 A Snakemake pipeline for processing [JunyueCaoLab/EasySci](https://github.com/JunyueCaoLab/EasySci) RNA fastqs. (Paired End ONLY)
 
