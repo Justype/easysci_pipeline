@@ -1,6 +1,10 @@
 # EasySci RNA Pipeline
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15692165.svg)](https://doi.org/10.5281/zenodo.15692165)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15692165.svg
+        
+        )](https://doi.org/10.5281/zenodo.15692165
+        
+        )
 
 A Snakemake pipeline for processing [JunyueCaoLab/EasySci](https://github.com/JunyueCaoLab/EasySci) RNA fastqs. (Paired End ONLY)
 
@@ -68,12 +72,9 @@ NOTE:
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a> EasySci Exon Counting Issues
 
-- `easysci`'s problems:
-  - Double counting if paired-end reads are in the same exon.
-  - Junction reads (`N` in CIGAR) are not used.
-  - If read1 overlaps with `{exon1, exon2}` and read2 overlaps with `{exon2}`, it will be counted as `exon1` and `exon2` in the `easysci` method.
+- `easysci`: The same as EasySci paper.
 - `balanced`:
-  - Solve the double counting issue by treating R1 and R2 as a group, and only count reads in the same exon once.
+  - Treat R1 and R2 as a group, and only count reads in the same exon once.
   - If read1 overlaps with `{exon1, exon2}` and read2 overlaps with `{exon2}`, it will be counted as `exon2` in the `balanced` method.
 - `junction`:
   - The same as `balanced`, but uses both exon and junction reads.
@@ -87,6 +88,8 @@ NOTE:
 ## References
 
 - EasySci Nature Genetics [https://doi.org/10.1038/s41588-023-01572-y
+        
+        
         
         ](https://www.nature.com/articles/s41588-023-01572-y)
 - [EasySci PhD Thesis](https://digitalcommons.rockefeller.edu/student_theses_and_dissertations/778/)
