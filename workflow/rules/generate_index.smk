@@ -24,7 +24,7 @@ rule generate_index:
         """
         if [ -d {params.prebuilt_star_index} ]; then
             echo "Using prebuilt STAR index: {params.prebuilt_star_index} for {wildcards.species}" | tee {log}
-            ln -s {params.prebuilt_star_index} {output} # Use symlink to avoid copying the index
+            ln -s {params.prebuilt_star_index} {output} 2>/dev/null || cp -r {params.prebuilt_star_index} {output}
         else
             echo "Generating STAR index for {wildcards.species}" | tee {log}
             STAR --runThreadN {threads} \
@@ -40,6 +40,8 @@ rule create_fasta:
     params:
         prebuilt_star_index = lambda wildcards: config["prebuilt_star_index"][wildcards.species],
         fasta = lambda wildcards: path.join(config["fasta_file"][wildcards.species]),
+        is_url = lambda wildcards: config["fasta_file"][wildcards.species].startswith("http"),
+        is_gzipped = lambda wildcards: config["fasta_file"][wildcards.species].endswith(".gz"),
     output:
         path.join(config["genome_folder"], "{species}.fa"),
     log:
@@ -58,22 +60,21 @@ rule create_fasta:
             touch {output}  # Create an empty file to satisfy the output requirement
         else
             # Check if params.fasta is url or local file and check if gzipped
-            is_url=$(echo "{params.fasta}" | grep -E '^https?://') # http or https
-            gzipped=$(echo "{params.fasta}" | grep -E '\\.gz$')
-            if [ -n "$is_url" ]; then
+            echo "IS URL: {params.is_url}, GZIPPED: {params.is_gzipped}" | tee -a {log}
+            if [ "{params.is_url}" = "True" ]; then
                 echo "Downloading FASTA file from URL: {params.fasta}" | tee -a {log}
-                if [ -n "$gzipped" ]; then
+                if [ "{params.is_gzipped}" = "True" ]; then
                     wget -qO- "{params.fasta}" | pigz -p {threads} -d > {output}
                 else
                     wget -qO {output} "{params.fasta}"
                 fi
             else
-                if [ -n "$gzipped" ]; then
+                if [ "{params.is_gzipped}" = "True" ]; then
                     echo "Unzipping gzipped FASTA file: {params.fasta}" | tee -a {log}
                     pigz -p {threads} -d < {params.fasta} > {output}
                 else
                     echo "Linking FASTA file: {params.fasta}" | tee -a {log}
-                    ln -s {params.fasta} {output}
+                    ln -s {params.fasta} {output} 2>/dev/null || cp {params.fasta} {output}
                 fi
             fi
         fi
@@ -82,6 +83,8 @@ rule create_fasta:
 rule create_gtf: # GTF cannot be prebuilt, so we always create it
     params:
         gtf = lambda wildcards: path.join(config["gtf_file"][wildcards.species]),
+        is_url = lambda wildcards: config["gtf_file"][wildcards.species].startswith("http"),
+        is_gzipped = lambda wildcards: config["gtf_file"][wildcards.species].endswith(".gz"),
     output:
         path.join(config["genome_folder"], "{species}.gtf"),
     log:
@@ -96,23 +99,22 @@ rule create_gtf: # GTF cannot be prebuilt, so we always create it
     shell:
         """
         # Check if input is url or local file and check if gzipped
-        is_url=$(echo "{params.gtf}" | grep -E '^https?://') # http or https
-        gzipped=$(echo "{params.gtf}" | grep -E '\\.gz$')
-        if [ -n "$is_url" ]; then
+        echo "IS URL: {params.is_url}, GZIPPED: {params.is_gzipped}" | tee -a {log}
+        # Check if params.is_url is True or False
+        if [ "{params.is_url}" = "True" ]; then
             echo "Downloading GTF file from URL: {params.gtf}" | tee -a {log}
-            if [ -n "$gzipped" ]; then
+            if [ "{params.is_gzipped}" = "True" ]; then
                 wget -qO- "{params.gtf}" | pigz -p {threads} -d > {output}
             else
                 wget -qO {output} "{params.gtf}"
             fi
         else
-            if [ -n "$gzipped" ]; then
+            if [ "{params.is_gzipped}" = "True" ]; then
                 echo "Unzipping gzipped GTF file: {params.gtf}" | tee -a {log}
                 pigz -p {threads} -d < {params.gtf} > {output}
             else
                 echo "Linking GTF file: {params.gtf}" | tee -a {log}
-                ln -s {params.gtf} {output}
+                ln -s {params.gtf} {output} 2>/dev/null || cp {params.gtf} {output}
             fi
         fi
         """
-
