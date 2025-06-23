@@ -66,7 +66,6 @@ def count_pair_with_junctions(algn_pair, exons, exon_gene_dict, counter):
     #   - Each block is separated by "N" in the CIGAR string.
     # - [1] intersection genes: set of genes that all blocks have in common (skip empty blocks)
     # - [2] union genes: set of all genes that are present in any of the blocks
-    # - [3] coordinates: list of tuples [start, end) for each block (0-based, end exclusive)
 
     # any to all
     if all(len(block) == 0 for block in first_algn_blocks_and_genes[0]) and all(len(block) == 0 for block in second_algn_blocks_and_genes[0]):
@@ -130,6 +129,26 @@ def count_pair_with_junctions(algn_pair, exons, exon_gene_dict, counter):
     else:
         skip_indices_first = []
         skip_indices_second = []
+        
+        # # Try to identify intersecting blocks
+        # i = len(first_algn_blocks_and_genes[0]) - 1 # last block of the first read
+        # j = len(second_algn_blocks_and_genes[0]) - 1 # last block of the second read
+        # is_common_found = False
+        # while i >= 0 and j >= 0:
+        #     common_exons = first_algn_blocks_and_genes[0][i] & second_algn_blocks_and_genes[0][j]
+        #     if common_exons:
+        #         blocks_to_count.append(common_exons)
+        #         is_common_found = True
+        #         # Skip the block of the first read and the second read
+        #         skip_indices_first.append(i)
+        #         skip_indices_second.append(j)
+        #     if is_common_found:
+        #         i -= 1
+        #         j -= 1
+        #     else:
+        #         # If no common exons, then check the next previous block of the second read
+        #         j -= 1
+
         for i in range(len(first_algn_blocks_and_genes[0])):
             for j in range(len(second_algn_blocks_and_genes[0])):
                 common_exons = first_algn_blocks_and_genes[0][i] & second_algn_blocks_and_genes[0][j]
@@ -295,7 +314,7 @@ def record_results(counter, output_count_mtx, output_cell_ids, cell_index, i7_pr
             output_count_mtx.write(f"{gene_exon_id_index[exon]},{cell_index},{counter[exon]}\n")
     
     unmatched_rate = n_unmatched / (n_unmatched + n_reads + n_ambiguous)
-    output_cell_ids.write(f"{cell_index},{i7_prefix}.{barcode},{unmatched_rate}\n")
+    output_cell_ids.write(f"{cell_index},{i7_prefix}-{barcode},{unmatched_rate}\n")
 
 def count_bam_parallel(input_folder, output_folder, exons, gene_exon_id_index, exon_gene_dict, i7_prefix):
     """

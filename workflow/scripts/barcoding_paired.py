@@ -13,7 +13,7 @@
 #      --barcodes_pattern: Barcodes pattern (ligation barcode in R2, UMI in R1, RT barcode in R1, oligo-dT in R1) as comma-separated values (default: 10,10,8,15)
 #      --min_rt_trim_length: Minimum length of RT barcode to be trimmed from R2 (default: 5)
 #   Output: R1, R2 fastq files with barcodes attached to headers
-#      Name Format: @<ligation_barcode><RT_barcode>,UMI,original_read_name
+#      Name Format: @<ligation_barcode>-<RT_barcode>,UMI,original_read_name
 ##############################################################
 
 import gzip
@@ -131,8 +131,8 @@ def attach_UMI(input_R1, input_R2, input_I5, output_R1, output_R2, ligation_barc
 
         #3. Rename the read name
         #         ligation_barcode RT_barcode, UMI, original read name
-        read1[0] = f"@{seq_ligation}{seq_rt},{seq_umi},{read1[0][1:]}"
-        read2[0] = f"@{seq_ligation}{seq_rt},{seq_umi},{read2[0][1:]}"
+        read1[0] = f"@{seq_ligation}-{seq_rt},{seq_umi},{read1[0][1:]}"
+        read2[0] = f"@{seq_ligation}-{seq_rt},{seq_umi},{read2[0][1:]}"
 
         #4. Trim R1 if RT barcode is randomN or oligo-dT
         if seq_rt in randomN_barcode:
