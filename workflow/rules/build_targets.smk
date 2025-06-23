@@ -1,43 +1,13 @@
 from os import path
 
-def has_human_sample():
-    """
-    Check if config["barcodes"]["rt_barcode"]["human"] file exists and is not empty.
-    Returns True if it exists, False otherwise.
-    """
-    return path.exists(config["barcodes"]["rt_barcode"]["human"]) and \
-               path.getsize(config["barcodes"]["rt_barcode"]["human"]) > 0
-
-def has_mouse_sample():
-    """
-    Check if config["barcodes"]["rt_barcode"]["mouse"] file exists and is not empty.
-    Returns True if it exists, False otherwise.
-    """
-    return path.exists(config["barcodes"]["rt_barcode"]["mouse"]) and \
-           path.getsize(config["barcodes"]["rt_barcode"]["mouse"]) > 0
-
-def create_build_objects():
-    """
-    Create the build_objects file based on the presence of human and mouse samples.
-    Returns the string of build objects to be used in the pipeline.
-
-    If both samples are present, it returns "human mouse".
-    """
-    build_objects = ""
-    if has_human_sample():
-        # print("Human sample detected.") # Test
-        build_objects += "human "
-    if has_mouse_sample():
-        # print("Mouse sample detected.") # Test
-        build_objects += "mouse "
-
-    return build_objects.strip()
+# Based on the config file, this rule generates a list of targets for building final objects.
+# human or mouse in the config file and the barcodes are not empty.
 
 checkpoint generate_final_targets:
     input:
         config["barcodes"]["ligation_barcode"]
     params:
-        build_objects = create_build_objects() # in rules/generate_py_barcode.py
+        build_objects = " ".join(config["output_species"])
     output:
         config["build_objects"]
     threads: 1
@@ -58,8 +28,13 @@ def generate_final_build_objects(wildcards):
     # Run the checkpoint to generate tsv before reading the build objects
     build_objects_path = checkpoints.generate_final_targets.get().output
 
+    targets = []
+
     with open(str(build_objects_path), 'r') as f:
-        targets = f.read().strip().split()
+        for species in f.read().strip().split():
+            if path.exists(config["barcodes"]["rt_barcode"][species]) and \
+                    path.getsize(config["barcodes"]["rt_barcode"][species]) > 0:
+                targets.append(species)
 
     build_targets = []
 

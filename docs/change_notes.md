@@ -7,6 +7,7 @@
 ## 2025-06-22
 
 - Fix error in `workflow/rules/generate_index.smk`. Replace bash variables with snake variables.
+- Fix issue in `workflow/rules/build_targets.smk`. Previous version required running `snakemake` twice. Now it only requires running once.
 
 TODO list:
 

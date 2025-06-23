@@ -2,6 +2,7 @@
 output_type:
   gene: true     # Generate gene expression matrix
   exon: true     # Generate exon expression matrix
+  velocyto: false # Generate velocyto output
 
 # Please use absolute paths for input files and directories.
 prebuilt_star_index: # If folder does not exist, it will be skipped.
@@ -30,6 +31,10 @@ threads:
   count_gene: 84
 
 # You don't need to change the following settings unless you have specific requirements.
+output_species:
+  - human
+  - mouse
+
 # Logs directory
 log_dir: output/logs
 log_dir_run: output/logs/run
