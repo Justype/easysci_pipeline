@@ -4,6 +4,15 @@
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a> EasySci Exon Counting Issues
 
+## 2025-06-22
+
+- Fix error in `workflow/rules/generate_index.smk`. Replace bash variables with snake variables.
+
+TODO list:
+
+1. Add velocyto support.
+2. Validate junction reads counting.
+
 ## 2025-06-18
 
 - Add different exon counting methods:
