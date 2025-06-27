@@ -40,7 +40,7 @@ def main():
             sys.stderr.write("WARNING: not proper read pairing during duplicate removal\n")
             continue
 
-        current_barcode_UMI = ",".join(algn1.query_name.partition(",")[:2])
+        current_barcode_UMI = ",".join(algn1.query_name.split(",")[:2])
         current_location = f"{algn1.reference_name}:{algn1.reference_start}-{algn2.reference_name}:{algn2.reference_start}"
 
         if current_barcode_UMI == pre_barcode_UMI: # same barcode and UMI (may be duplicates)

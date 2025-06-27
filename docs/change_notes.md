@@ -4,6 +4,10 @@
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a> EasySci Exon Counting Issues
 
+## 2025-06-27
+
+- Fix error in `workflow/scripts/bam_dedup_paired.py` change partition to split
+
 ## 2025-06-24
 
 - Fix error in `workflow/rules/generate_index.smk`. Replace bash variables with snake variables.
