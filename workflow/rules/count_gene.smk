@@ -14,7 +14,7 @@ rule count_gene:
             path.join(config["output_dir"], wildcards.species, "bam_filtered", "{prefix}.filtered.dedup.bam"),
             prefix=PREFIXES
         ),
-        gtf = path.join(config["genome_folder"], "{species}.gtf"),
+        gtf = path.join(config["genome_folder"], "{species}_annotation.gtf"),
         rt_barcode_tsv = lambda wildcards: config["barcodes"]["rt_barcode_tsv"][wildcards.species],
     output:
         # counts = lambda wildcards: expand(

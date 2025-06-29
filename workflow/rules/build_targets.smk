@@ -47,5 +47,7 @@ def generate_final_build_objects(wildcards):
         if config["output_type"]["exon"]:
             for file_key in config["output_matrix"]:
                 build_targets.append(path.join(config["output_dir_final"], f"{species}_exon", config["output_matrix"][file_key]))
+        if config["output_type"]["velocyto"]:
+            build_targets.append(path.join(config["output_dir_final"], f"{species}.loom"))
 
     return build_targets

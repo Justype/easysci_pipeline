@@ -8,7 +8,7 @@ rule generate_index:
         index_length = config["seq_length"] - 1,
     input:
         fasta = path.join(config["genome_folder"], "{species}.fa"),
-        gtf = path.join(config["genome_folder"], "{species}.gtf"),
+        gtf = path.join(config["genome_folder"], "{species}_annotation.gtf"),
     output:
         directory(path.join(config["star_index_folder"], "{species}"))
     log:
@@ -86,7 +86,7 @@ rule create_gtf: # GTF cannot be prebuilt, so we always create it
         is_url = lambda wildcards: config["gtf_file"][wildcards.species].startswith("http"),
         is_gzipped = lambda wildcards: config["gtf_file"][wildcards.species].endswith(".gz"),
     output:
-        path.join(config["genome_folder"], "{species}.gtf"),
+        path.join(config["genome_folder"], "{species}_annotation.gtf"),
     log:
         path.join(config["log_dir_run"], "{species}/0_create_gtf.log")
     conda:

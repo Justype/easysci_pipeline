@@ -14,6 +14,10 @@ snakemake -c 84 --use-conda --rerun-triggers mtime
 
 ## Rulegraph
 
+```
+snakemake --rulegraph | dot -Tsvg > rulegraph.svg
+```
+
 ![rulegraph](./rulegraph.svg)
 
 ## Tips

@@ -9,20 +9,12 @@ include: "rules/star.smk" # align reads to genome
 include: "rules/bam_filter_dedup.smk" # get primary reads, remove duplicates
 include: "rules/count_exon.smk" # count reads using exon annotation
 include: "rules/count_gene.smk" # count reads using gene annotation
+include: "rules/velocyto.smk" # run velocyto to generate loom file
 
 PREFIXES = [prefix for prefix in open(config["input_prefix_file"]).read().splitlines() if prefix]
 
 from os import path
 
-build_targets = []
-for species in ["human", "mouse"]:
-    for count_type in [ "gene", "exon"]: # "gene", "exon"
-        build_targets.append(path.join(config["output_dir_final"], f"{species}_{count_type}", config["output_matrix"]["mtx"]))
-        build_targets.append(path.join(config["output_dir_final"], f"{species}_{count_type}", config["output_matrix"]["cells"]))
-        build_targets.append(path.join(config["output_dir_final"], f"{species}_{count_type}", config["output_matrix"]["features"]))
-
 rule targets:
     input:
         generate_final_build_objects, # dynamically create object by rt_barcode_tsv
-
-        # build_targets, # To generate rulegraph and dag
