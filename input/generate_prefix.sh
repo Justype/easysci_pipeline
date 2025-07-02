@@ -11,6 +11,14 @@ if [[ -f i7_demux_prefix.txt ]]; then
   exit 0
 fi
 
+# Make sure the fastq files are matched with the expected naming convention
+# The expected naming convention is: scRNAv3_01_R1.fastq.gz
+# Only 2 _ separators are allowed in the file name
+if [[ $(ls fastqs | grep -E '^[^_]+_[0-9]+_R[123].fastq.gz$' | wc -l) -eq 0 ]]; then
+  echo "No fastq files found in 'fastqs' directory with the expected naming convention."
+  exit 1
+fi
+
 # The file names should be in the format: scRNAv3_01_R1.fastq.gz
 ls fastqs | cut -d _ -f 1-2 | uniq > i7_demux_prefix.txt
 
@@ -44,4 +52,3 @@ for sample in $(cat i7_demux_prefix.txt); do
     fi
   done
 done
-

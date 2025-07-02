@@ -14,7 +14,7 @@
 #   Output:
 #      <output_folder>/<i7_prefix>.count: Count file with gene expression per cell ┐ 
 #      <output_folder>/<i7_prefix>_cell_id.csv: Cell id file with unmatched rate   │ for later sparse matrix creation
-#      <output_folder>/gene_ids.csv: Gene exon id table           ┘
+#      <output_folder>/gene_ids.csv: Gene exon id table                            ┘
 ##############################################################
 
 # Counting Strategy:
@@ -264,8 +264,9 @@ def count_bam(bam_path, output_prefix, genes, exons, transcript_ends, gene_id_in
         algn_pair = bundle[0]
         # Since the bam file is name sorted and the name starts with cell barcode, we can use it to separate cells
         # NAME:@<cell_barcode>,<UMI>,<read_name>
-        barcode = algn_pair[0].read.name.partition(",")[0]
-        is_randomn = barcode[10:20] in randomn_barcodes # first 10 ligation, next 10 rt
+        barcode = algn_pair[0].read.name.partition(",")[0] # @<ligation_barcode>-<RT_barcode>,UMI,original_read_name
+        barcode_ligation, barcode_rt = barcode.split("-") # @<ligation_barcode>-<RT_barcode>
+        is_randomn = barcode_rt in randomn_barcodes
 
         if barcode == previous_barcode: # Same cell
             count_pair(algn_pair, genes, exons, transcript_ends, is_randomn, counter)
@@ -308,7 +309,7 @@ def record_results(counter, output_count_mtx, output_cell_ids, cell_index, i7_pr
             output_count_mtx.write(f"{gene_id_index[exon]},{cell_index},{counter[exon]}\n")
     
     unmatched_rate = n_unmatched / (n_unmatched + n_reads + n_ambiguous)
-    output_cell_ids.write(f"{cell_index},{i7_prefix}-{barcode},{unmatched_rate}\n") # <P7_barcode(i7_prefix)>-<ligation_barcode>-<RT_barcode>
+    output_cell_ids.write(f"{cell_index},{i7_prefix}-{barcode},{unmatched_rate}\n") # <i7_prefix>-<ligation_barcode>-<RT_barcode>
 
 def count_bam_parallel(input_folder, output_folder, genes, exons, transcript_ends, gene_id_index, randomn_barcodes, i7_prefix):
     """

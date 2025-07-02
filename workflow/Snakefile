@@ -5,16 +5,15 @@ include: "rules/generate_index.smk" # download or link genome and build STAR ind
 include: "rules/generate_py_barcode.smk" # create tsv and python dict for barcodes
 include: "rules/barcoding.smk" # add barcode to read name from sequence
 include: "rules/trim.smk" # trim adapter and polyA from reads
-include: "rules/star.smk" # align reads to genome
+if config["star_tolerant"]:
+    include: "rules/star_tolerant.smk" # align reads to genome with tolerant settings
+else:
+    include: "rules/star.smk" # align reads to genome
 include: "rules/bam_filter_dedup.smk" # get primary reads, remove duplicates
 include: "rules/count_exon.smk" # count reads using exon annotation
 include: "rules/count_gene.smk" # count reads using gene annotation
 include: "rules/velocyto.smk" # run velocyto to generate loom file
 
-PREFIXES = [prefix for prefix in open(config["input_prefix_file"]).read().splitlines() if prefix]
-
-from os import path
-
 rule targets:
     input:
-        generate_final_build_objects, # dynamically create object by rt_barcode_tsv
+        generate_final_build_objects # dynamically create object by rt_barcode_tsv

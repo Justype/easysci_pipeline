@@ -68,6 +68,7 @@ rule bam_add_bc:
 rule velocyto:
     params:
         output_folder = lambda wildcards: path.join(config["output_dir"], wildcards.species, "velocyto", wildcards.prefix),
+        cell_sorted_bam = lambda wildcards: path.join(config["output_dir"], wildcards.species, "bam_bc", f"cellsorted_{wildcards.prefix}.sorted.bam"),
     input:
         bam = path.join(config["output_dir"], "{species}/bam_bc/{prefix}.sorted.bam"),
         gtf = path.join(config["genome_folder"], "{species}_annotation.gtf"),
@@ -92,7 +93,10 @@ rule velocyto:
             {input.gtf} &> {log}
 
         # Move the output loom file to the expected output location
-        mv {params.output_folder}/*.loom {output} 2> {log}
+        mv {params.output_folder}/*.loom {output} &>> {log}
+
+        # Remove Intermediate output bam file
+        rm {params.cell_sorted_bam} 2>/dev/null || true
 
         rmdir {params.output_folder} 2>/dev/null || true
         """

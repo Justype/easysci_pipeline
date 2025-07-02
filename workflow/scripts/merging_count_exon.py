@@ -73,7 +73,7 @@ def get_metadata_remove_empty(cell_ids_df, count_mtx):
     # columns of count_mtx are cells, axis = 0
     cell_ids_df["umi_count"] = count_mtx.sum(axis=0).A[0]
     cell_ids_df["exon_count"] = (count_mtx > 0).sum(axis=0).A[0]
-    # <P7_barcode(i7_prefix)>-<ligation_barcode>-<RT_barcode>
+    # <i7_barcode>-<ligation_barcode>-<RT_barcode>
     cell_ids_df[["pcr_batch", "ligation_barcodes", "rt_barcodes"]] = cell_ids_df["cell_id"].str.split(pat="-", n=2, expand=True)
     
     count_mtx = count_mtx[:, cell_ids_df["umi_count"] > 0]

@@ -14,6 +14,19 @@ import os
 # hgta_outFileName=hg38_rmsk.gtf&
 # hgta_doTopSubmit=get+output
 
+def main():
+    # Download for Human (hg38)
+    if download_ucsc_repeatmasker_gtf(genome="hg38", output_file="hg38_rmsk.gtf"):
+        print("\n--- hg38 RepeatMasker GTF download completed. ---")
+    else:
+        print("\n--- hg38 RepeatMasker GTF download failed. ---")
+    
+    # Download for Mouse (mm39)
+    if download_ucsc_repeatmasker_gtf(genome="mm39", output_file="mm39_rmsk.gtf"):
+        print("\n--- mm39 RepeatMasker GTF download completed. ---")
+    else:
+        print("\n--- mm39 RepeatMasker GTF download failed. ---")
+
 def download_ucsc_repeatmasker_gtf(genome="hg38", output_file="hg38_rmsk.gtf"):
     """
     Downloads the RepeatMasker table as a GTF file from UCSC Genome Browser.
@@ -89,14 +102,4 @@ def download_ucsc_repeatmasker_gtf(genome="hg38", output_file="hg38_rmsk.gtf"):
         return False
 
 if __name__ == "__main__":
-    # Download for Human (hg38)
-    if download_ucsc_repeatmasker_gtf(genome="hg38", output_file="hg38_rmsk.gtf"):
-        print("\n--- hg38 RepeatMasker GTF download completed. ---")
-    else:
-        print("\n--- hg38 RepeatMasker GTF download failed. ---")
-    
-    # Download for Mouse (mm39)
-    if download_ucsc_repeatmasker_gtf(genome="mm39", output_file="mm39_rmsk.gtf"):
-        print("\n--- mm39 RepeatMasker GTF download completed. ---")
-    else:
-        print("\n--- mm39 RepeatMasker GTF download failed. ---")
+    main()

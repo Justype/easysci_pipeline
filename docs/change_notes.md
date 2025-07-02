@@ -4,15 +4,25 @@
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a> EasySci Exon Counting Issues
 
-## 2025-06-29
-
-- Add Velocyto support (testing)
-
-TODO list:
+## TODO list
 
 1. Validate Velocyto output.
 2. Validate junction reads counting.
-3. Rename P7 barcodes demultiplexed files to actual barcodes. (PCR batch)
+3. Rename I7 barcodes demultiplexed files to actual barcodes. (PCR batch)
+
+## 2025-07-01
+
+- Fix error in `workflow/scripts/counting_gene_paired_parallel.py` (Get the barcodes by splitting not slicing)
+- Add `workflow/rules/star_tolerant.smk`
+- Remove intermediate `cell_sorted` bam in `velocyto` rule.
+- Add example `run_snakemake.sh` script to run the pipeline.
+- Reorganize the `workflow` folder:
+  - Add `utils` folder for utility scripts. (Not used in the rules)
+  - Remove unused scripts.
+
+## 2025-06-29
+
+- Add Velocyto support (testing)
 
 ## 2025-06-27
 
@@ -23,7 +33,7 @@ TODO list:
 - Fix error in `workflow/rules/generate_index.smk`. Replace bash variables with snake variables.
 - Fix issue in `workflow/rules/build_targets.smk`. Previous version required running `snakemake` twice. Now it only requires running once.
 - Change the output barcode to `-` delimited to match the `CB` format of the [SAM tag](https://samtools.github.io/hts-specs/SAMtags.pdf).
-  - `<P7_barcode(PCR batch)>-<ligation_barcode>-<RT_barcode>`
+  - `<I7_barcode(PCR batch)>-<ligation_barcode>-<RT_barcode>`
 
 ## 2025-06-18
 

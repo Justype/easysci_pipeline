@@ -24,6 +24,13 @@ exon_counting_method: "easysci" # easysci, balanced, junction
 # easysci is the default method from the paper
 # balanced is using exon reads and only count once if both reads are in the same exon
 # junction is using both exon and junction reads and only count once if both blocks are in the same exon (blocks are separated by CIGAR operator N)
+# easysci_junction is trying to use easysci method with junction reads
+star_tolerant: false # If true star_tolerant.smk, else star.smk will be used.
+# star_tolerant makes the following changes:
+#   --outFilterMismatchNoverLmax 0.3 => 0.1
+#   --outFilterScoreMinOverLread 0.66 => 0.33
+#   --outFilterMatchNminOverLread 0.66 => 0.33
+# Still under development, not recommended for production use.
 
 threads:
   generate_index: 16 # STAR index generation threads

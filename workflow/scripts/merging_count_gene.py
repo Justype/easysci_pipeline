@@ -20,6 +20,7 @@
 #   and adds metadata to the cell annotation matrix.
 # It also merges RT primers from the same cell
 #   (barcodes on the same row are from the same cell)
+# The output rt barcodes will be short-dT barcodes. (randomN will be converted to short-dT)
 
 import pandas as pd
 from os import path
@@ -89,7 +90,7 @@ def get_metadata_remove_empty(cell_ids_df, count_mtx):
     # columns of count_mtx are cells, axis = 0
     cell_ids_df["umi_count"] = count_mtx.sum(axis=0).A[0]
     cell_ids_df["gene_count"] = (count_mtx > 0).sum(axis=0).A[0]
-    # <P7_barcode(i7_prefix)>-<ligation_barcode>-<RT_barcode>
+    # <i7_barcode>-<ligation_barcode>-<RT_barcode>
     cell_ids_df[["pcr_batch", "ligation_barcodes", "rt_barcodes"]] = cell_ids_df["cell_id"].str.split(pat="-", n=2, expand=True)
     
     count_mtx = count_mtx[:, cell_ids_df["umi_count"] > 0]

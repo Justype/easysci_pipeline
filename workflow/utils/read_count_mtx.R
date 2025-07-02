@@ -15,7 +15,7 @@ output_file <- args[2]
 gzip <- ifelse(length(args) > 2, args[3] == "gzip", FALSE)
 
 read_count_matrix <- function(folder, is_gzipped = T) {
-  require(Seurat); require(magrittr); require(tidyr); require(dplyr)
+  require(Seurat); require(readr); require(tidyr); require(dplyr)
   cell_path <- ifelse(is_gzipped, "cell_annotation.csv.gz", "cell_annotation.csv")
   cell_path <- file.path(folder, cell_path)
   feature_path <- ifelse(is_gzipped, "feature_annotation.csv.gz", "feature_annotation.csv")
