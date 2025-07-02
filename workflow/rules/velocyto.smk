@@ -121,5 +121,5 @@ rule merge_velocyto:
         """
         python workflow/scripts/merging_velocyto.py \\
             --input {input.loom_files} \\
-            --output {output}
+            --output {output} &> {log}
         """

@@ -14,7 +14,7 @@ snakemake --use-conda -c 48
 
 The output matrix files will be in the `output/final/(human|mouse)_(gene|exon)` folders.
 
-You can use [read_count_mtx.R](./workflow/scripts/read_count_mtx.R) to read the output matrix as a `Seurat` object.
+You can use [read_count_mtx.R](./workflow/utils/read_count_mtx.R) to read the output matrix as a `Seurat` object.
 
 Due to the nature of the EasySci method, most of the “nuclei” have low UMI counts (< 50). They are not true nuclei, but environmental RNA fragments.
 
@@ -54,8 +54,9 @@ Please check the `config.yaml`
 |Use prebuilt STAR index| `prebuilt_star_index`| absolute path to star index folder or keep it default |
 |Fasta file| `fasta_file`| absolute path or URL (can be gzipped) |
 |GTF file| `gtf_file`| absolute path or URL (can be gzipped) |
+|RMSK GTF file| `rmsk_gtf_file`| absolute path or URL (raw file, do not gzip) |
 |Read length| `seq_length`| used for STAR index generation |
-|Exon counting method| `exon_counting_method`| `junction`, `balanced`, or `easysci` |
+|Exon counting method| `exon_counting_method`| `easysci`, `balanced`, or `junction` |
 
 NOTE:
 
