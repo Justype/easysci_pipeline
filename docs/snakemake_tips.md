@@ -14,7 +14,7 @@ snakemake -c 84 --use-conda --rerun-triggers mtime
 
 ## Rulegraph
 
-```
+```bash
 snakemake --rulegraph | dot -Tsvg > rulegraph.svg
 ```
 
@@ -29,4 +29,3 @@ Use `--rerun-triggers mtime` for debugging to rerun rules based on file modifica
 Rules are for static tasks. Checkpoints are for dynamic tasks that depend on the output of previous rules.
 
 In this pipeline, checkpoint `generate_final_targets` is used to determine which species to process based on the content of `config["rt_barcode_tsv"][species]`. If human's tsv is empty, the pipeline will not run the human alignment and counting rules.
-

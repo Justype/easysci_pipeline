@@ -6,15 +6,18 @@ library(Seurat, quietly = TRUE)
 # Read from the command line
 # arg1 input folder
 # arg2 output rds file
-# arg3 gzip or not
+# arg3 gzip or not (by default TRUE)
 
 args <- commandArgs(trailingOnly = TRUE)
 
 input_folder <- args[1]
-output_file <- args[2]
-gzip <- ifelse(length(args) > 2, args[3] == "gzip", FALSE)
+# Remove trailing slash if it exists
+input_folder <- str_remove(input_folder, "/$")
+output_file <- ifelse(length(args) > 1, args[2], file.path(dirname(input_folder), paste0(basename(input_folder), ".qs")))
+message("Output file: ", output_file)
+gzip <- ifelse(length(args) > 2, args[3] != "gzip", TRUE)
 
-read_count_matrix <- function(folder, is_gzipped = T) {
+read_count_matrix <- function(folder, is_gzipped = TRUE) {
   require(Seurat); require(readr); require(tidyr); require(dplyr)
   cell_path <- ifelse(is_gzipped, "cell_annotation.csv.gz", "cell_annotation.csv")
   cell_path <- file.path(folder, cell_path)
@@ -42,4 +45,41 @@ read_count_matrix <- function(folder, is_gzipped = T) {
   return(so)
 }
 
-saveRDS(read_count_matrix(input_folder, gzip), output_file)
+feature_annotation <- read_csv(
+  file.path(input_folder, ifelse(gzip, "feature_annotation.csv.gz", "feature_annotation.csv")),
+  show_col_types = FALSE
+)
+
+is_human <- str_detect(feature_annotation$gene_id[1], "^ENSG")
+is_mouse <- str_detect(feature_annotation$gene_id[1], "^ENSMUSG")
+
+if (!is_human && !is_mouse) {
+  stop("The gene IDs in the feature annotation file must be either human (ENSG) or mouse (ENSMUSG).")
+} else if (is_human) {
+  message("Detected human gene IDs (ENSG).")
+} else if (is_mouse) {
+  message("Detected mouse gene IDs (ENSMUSG).")
+}
+
+mt_gene_ids <- feature_annotation %>%
+  filter(str_detect(gene_name, ifelse(is_human, "^MT-", "^mt-"))) %>%
+  pull(gene_id)
+
+message("[", date(), "] Reading count matrix from folder: ", input_folder)
+
+so <- read_count_matrix(input_folder, gzip)
+
+message("[", date(), "] Read successfully. Ncells: ", ncol(so), ", Nfeatures: ", nrow(so))
+
+so[["percent.mt"]] <- PercentageFeatureSet(so, features = mt_gene_ids)
+
+# extension qs or rds
+if (str_detect(output_file, regex("\\.qs$", ignore_case = TRUE))) {
+  qs::qsave(so, output_file)
+} else if (str_detect(output_file, regex("\\.rds$", ignore_case = TRUE))) {
+  saveRDS(so, output_file)
+} else {
+  stop("Output file must have .qs or .rds extension")
+}
+
+message("[", date(), "] Saved Seurat object to: ", output_file)
