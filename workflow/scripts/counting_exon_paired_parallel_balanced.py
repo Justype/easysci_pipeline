@@ -216,7 +216,8 @@ def record_results(counter, output_count_mtx, output_cell_ids, cell_index, i7_pr
             output_count_mtx.write(f"{gene_exon_id_index[exon]},{cell_index},{counter[exon]}\n")
     
     unmatched_rate = n_unmatched / (n_unmatched + n_reads + n_ambiguous)
-    output_cell_ids.write(f"{cell_index},{i7_prefix}-{barcode},{unmatched_rate}\n")
+    ligation_barcode, rt_barcode = barcode.split("-")
+    output_cell_ids.write(f"{cell_index},{i7_prefix}.{ligation_barcode}.{rt_barcode},{unmatched_rate}\n")
 
 def count_bam_parallel(input_folder, output_folder, exons, gene_exon_id_index, exon_gene_dict, i7_prefix):
     """

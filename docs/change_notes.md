@@ -10,6 +10,10 @@
 2. Validate junction reads counting.
 3. Rename I7 barcodes demultiplexed files to actual barcodes. (PCR batch)
 
+## 2025-08-10
+
+- Change cell barcode separator from `-` to `.` (Velocyto cannot handle `-`)
+
 ## 2025-07-01
 
 - Fix error in `workflow/scripts/counting_gene_paired_parallel.py` (Get the barcodes by splitting not slicing)

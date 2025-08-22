@@ -50,7 +50,7 @@ def main():
         if algn_rt_barcode is None:
             print(f"Warning: RT barcode {algn_rt_barcode} not found in the mapping. Skipping alignment.")
             continue
-        algn_barcode = f"{args.i7_prefix}-{algn_ligation}-{algn_rt_barcode}"
+        algn_barcode = f"{args.i7_prefix}.{algn_ligation}.{algn_rt_barcode}"
         algn.set_tag("CB", algn_barcode)
         algn.set_tag("UB", algn_UMI)
 

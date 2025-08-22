@@ -73,8 +73,8 @@ def get_metadata_remove_empty(cell_ids_df, count_mtx):
     # columns of count_mtx are cells, axis = 0
     cell_ids_df["umi_count"] = count_mtx.sum(axis=0).A[0]
     cell_ids_df["exon_count"] = (count_mtx > 0).sum(axis=0).A[0]
-    # <i7_barcode>-<ligation_barcode>-<RT_barcode>
-    cell_ids_df[["pcr_batch", "ligation_barcodes", "rt_barcodes"]] = cell_ids_df["cell_id"].str.split(pat="-", n=2, expand=True)
+    # <i7_barcode>.<ligation_barcode>.<RT_barcode>
+    cell_ids_df[["pcr_batch", "ligation_barcodes", "rt_barcodes"]] = cell_ids_df["cell_id"].str.split(pat=".", n=2, expand=True)
     
     count_mtx = count_mtx[:, cell_ids_df["umi_count"] > 0]
     cell_ids_df = cell_ids_df[cell_ids_df["umi_count"] > 0].reset_index(drop=True)
@@ -106,7 +106,7 @@ def merge_rt_primers(cell_ids_df, count_mtx, rt_barcode_tsv_path):
     # shortdt randomN (convert randomN to short-dT barcodes for cell merging)
     rt_barcode_dict, randomn_set, shortdt_set, rt_dt_sample_dict = get_rt_barcode_dict(rt_barcode_tsv_path)
     cell_ids_df["rt_barcodes_new"] = cell_ids_df["rt_barcodes"].map(rt_barcode_dict)
-    cell_ids_df["cell_id_new"] = cell_ids_df["pcr_batch"] + "-" + cell_ids_df["ligation_barcodes"] + "-" + cell_ids_df["rt_barcodes_new"]
+    cell_ids_df["cell_id_new"] = cell_ids_df["pcr_batch"] + "." + cell_ids_df["ligation_barcodes"] + "." + cell_ids_df["rt_barcodes_new"]
 
     # record short-dT and randomN UMI separately
     cell_ids_df["shortdt_umi_count"] = 0.0
