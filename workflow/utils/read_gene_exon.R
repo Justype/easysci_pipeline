@@ -108,7 +108,7 @@ library(Seurat)
 # arg3 minimum number of features (optional)
 
 args <- commandArgs(trailingOnly = TRUE)
-default_min_feature_rna <- 10
+default_min_feature_rna <- 0
 
 if (length(args) < 1) {
   stop("At least one argument (input prefix) must be provided.")
