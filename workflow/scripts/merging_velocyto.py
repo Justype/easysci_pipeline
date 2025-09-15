@@ -30,6 +30,13 @@ def main():
     args = parser.parse_args()
     
     merge_loom_files(args.input, args.output)
+
+    # rename the CellID in loom file
+    # e.g. from "Sample1:Cell1" to "Cell1"
+
+    with loompy.connect(args.output, 'r+') as ds:
+        ds.ca["CellID"] = [cell.split(":")[1] for cell in ds.ca["CellID"]]
+
     print(f"Merged {len(args.input)} loom files into {args.output}")
 
 if __name__ == "__main__":
